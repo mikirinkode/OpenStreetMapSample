@@ -3,6 +3,7 @@ package com.mikirinkode.openstreetmapsample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.View
 import androidx.core.app.ActivityCompat
 import com.mikirinkode.openstreetmapsample.databinding.ActivityMainBinding
 import org.osmdroid.api.IMapController
@@ -45,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         val startPoint = GeoPoint(-3.150333537966098, 115.70600362763918)
         mapController.setCenter(startPoint)
         mapController.setZoom(4.5)
-
-        initCityMarker(LocationItem.getDummyLocations())
     }
 
     override fun onResume() {
@@ -92,18 +91,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeUserLocation() {
+        showLoading()
+        val myLocation = MyLocationNewOverlay(GpsMyLocationProvider(this@MainActivity), map)
+        myLocation.enableMyLocation()
+        map.overlays.add(myLocation)
+        myLocation.runOnFirstFix(Runnable {
+            runOnUiThread {
+                mapController.animateTo(myLocation.myLocation, 18.0, 10L)
+                hideLoading()
+            }
+        })
+    }
+
     private fun actionClick() {
         binding.apply {
             fabMyLocation.setOnClickListener {
-                val myLocation = MyLocationNewOverlay(GpsMyLocationProvider(this@MainActivity), map)
-                myLocation.enableMyLocation()
-                map.overlays.add(myLocation)
-                myLocation.runOnFirstFix(Runnable {
-                    runOnUiThread {
-                        mapController.animateTo(myLocation.myLocation, 18.0, 10L)
-                    }
-                })
+                observeUserLocation()
+            }
+            switchShowCity.setOnCheckedChangeListener { compoundButton, value ->
+                showLoading()
+                if (value) {
+                    initCityMarker(LocationItem.getDummyLocations())
+                } else {
+                    map.overlays.clear()
+                }
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.progressIndicator.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressIndicator.visibility = View.GONE
     }
 }
