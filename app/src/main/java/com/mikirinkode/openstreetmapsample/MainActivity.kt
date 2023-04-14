@@ -1,5 +1,6 @@
 package com.mikirinkode.openstreetmapsample
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -17,6 +18,7 @@ import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -76,6 +78,14 @@ class MainActivity : AppCompatActivity() {
         }
         val mapEventsOverlay = MapEventsOverlay(this,  mapEventsReceiver)
         map.overlays.add(mapEventsOverlay)
+
+        val point1 = GeoPoint(-7.795472672400174, 110.36963783598146)
+        val point2 = GeoPoint(-6.209391770495319, 106.84590364284973)
+        val line = Polyline(map)
+        line.addPoint(point1)
+        line.addPoint(point2)
+
+        map.overlays.add(line)
     }
 
     override fun onResume() {
@@ -150,12 +160,18 @@ class MainActivity : AppCompatActivity() {
                 observeUserLocation()
             }
             switchShowCity.setOnCheckedChangeListener { compoundButton, value ->
-                showLoading()
                 if (value) {
                     initCityMarker(LocationItem.getDummyLocations())
                 } else {
                     map.overlays.clear()
                 }
+            }
+
+            edtStartLocation.setOnClickListener {
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+            }
+            edtDestinationLocation.setOnClickListener {
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
             }
         }
     }
