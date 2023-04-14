@@ -10,7 +10,12 @@ import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 import org.osmdroid.config.Configuration.*
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
@@ -46,6 +51,31 @@ class MainActivity : AppCompatActivity() {
         val startPoint = GeoPoint(-3.150333537966098, 115.70600362763918)
         mapController.setCenter(startPoint)
         mapController.setZoom(4.5)
+
+//        map.addMapListener(object: MapListener {
+//            override fun onScroll(event: ScrollEvent?): Boolean {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onZoom(event: ZoomEvent?): Boolean {
+//                TODO("Not yet implemented")
+//            }
+//
+//        })
+
+        val mapEventsReceiver = object : MapEventsReceiver{
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                p?.let { createMarker(it) }
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                return true
+            }
+
+        }
+        val mapEventsOverlay = MapEventsOverlay(this,  mapEventsReceiver)
+        map.overlays.add(mapEventsOverlay)
     }
 
     override fun onResume() {
@@ -89,6 +119,16 @@ class MainActivity : AppCompatActivity() {
 
             map.overlays.add(marker)
         }
+    }
+
+    private fun createMarker(geoPoint: GeoPoint){
+        val markerPoint = geoPoint // jakarta
+        val marker = Marker(map)
+        marker.position = markerPoint
+        marker.title = "Your Selected Location"
+        marker.icon = resources.getDrawable(R.drawable.ic_location)
+
+        map.overlays.add(marker)
     }
 
     private fun observeUserLocation() {
