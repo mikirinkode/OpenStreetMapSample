@@ -1,5 +1,9 @@
 package com.mikirinkode.openstreetmapsample
 
+import org.osmdroid.api.IMapController
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapController
+
 data class LocationItem(
 
     val name: String,
