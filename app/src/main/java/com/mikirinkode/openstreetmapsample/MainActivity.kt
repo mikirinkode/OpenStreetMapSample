@@ -8,6 +8,10 @@ import com.mikirinkode.openstreetmapsample.databinding.ActivityMainBinding
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 import org.osmdroid.config.Configuration.*
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,13 +24,40 @@ class MainActivity : AppCompatActivity() {
         binding.mapView
     }
 
+    private val mapController by lazy {
+        map.controller
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
-
         setContentView(binding.root)
+        setupMap()
+        actionClick()
+    }
 
+    private fun setupMap(){
         map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setMultiTouchControls(true)
+
+        // setup starting view
+        val startPoint = GeoPoint(-3.150333537966098, 115.70600362763918)
+        mapController.setCenter(startPoint)
+        mapController.setZoom(4.5)
+
+        val myLocation = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
+        myLocation.enableMyLocation()
+        map.overlays.add(myLocation)
+        myLocation.runOnFirstFix(Runnable {
+            kotlin.run {
+                mapController.animateTo(myLocation.myLocation)
+                binding.edtLat.setText(myLocation.myLocation.latitude.toString())
+                binding.edtLong.setText(myLocation.myLocation.longitude.toString())
+            }
+        })
+
+
+        initCityMarker(LocationItem.getDummyLocations())
     }
 
     override fun onResume() {
@@ -57,5 +88,24 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_PERMISSIONS_REQUEST_CODE)
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun initCityMarker(locationList: List<LocationItem>){
+        for (location in locationList){
+            val markerPoint = GeoPoint(location.latitude, location.longitude) // jakarta
+            val marker = Marker(map)
+            marker.position = markerPoint
+            marker.title = location.name
+            marker.icon = resources.getDrawable(R.drawable.ic_location)
+
+            map.overlays.add(marker)
+        }
+    }
+    private fun actionClick(){
+        binding.apply {
+            fabMyLocation.setOnClickListener {
+
+            }
+        }
     }
 }
