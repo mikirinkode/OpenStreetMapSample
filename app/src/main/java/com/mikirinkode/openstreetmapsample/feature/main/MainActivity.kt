@@ -7,12 +7,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.mikirinkode.openstreetmapsample.utils.LocationItem
 import com.mikirinkode.openstreetmapsample.R
 import com.mikirinkode.openstreetmapsample.databinding.ActivityMainBinding
 import com.mikirinkode.openstreetmapsample.feature.search.SearchActivity
 import org.osmdroid.api.IMapController
-import org.osmdroid.config.Configuration.*
+import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -22,7 +21,6 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -83,16 +81,6 @@ class MainActivity : AppCompatActivity(), MainView {
         mapController.setCenter(startPoint)
         mapController.setZoom(4.5)
 
-//        map.addMapListener(object: MapListener {
-//            override fun onScroll(event: ScrollEvent?): Boolean {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onZoom(event: ZoomEvent?): Boolean {
-//                TODO("Not yet implemented")
-//            }
-//
-//        })
 
         val mapEventsReceiver = object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
@@ -120,13 +108,6 @@ class MainActivity : AppCompatActivity(), MainView {
         val mapEventsOverlay = MapEventsOverlay(this, mapEventsReceiver)
         map.overlays.add(mapEventsOverlay)
 
-//        val point1 = GeoPoint(-7.795472672400174, 110.36963783598146)
-//        val point2 = GeoPoint(-6.209391770495319, 106.84590364284973)
-//        val line = Polyline(map)
-//        line.addPoint(point1)
-//        line.addPoint(point2)
-//
-//        map.overlays.add(line)
     }
 
     override fun onResume() {
@@ -160,18 +141,6 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun initCityMarker(locationList: List<LocationItem>) {
-        for (location in locationList) {
-            val markerPoint = GeoPoint(location.latitude, location.longitude) // jakarta
-            val marker = Marker(map)
-            marker.position = markerPoint
-            marker.title = location.name
-            marker.icon = resources.getDrawable(R.drawable.ic_location)
-
-            map.overlays.add(marker)
-        }
-    }
-
     private fun createMarker(geoPoint: GeoPoint) {
         tempLatLng = geoPoint
 
@@ -180,9 +149,8 @@ class MainActivity : AppCompatActivity(), MainView {
             tempIndex = null
         }
 
-        val markerPoint = geoPoint // jakarta
         val marker = Marker(map)
-        marker.position = markerPoint
+        marker.position = geoPoint
         marker.title = "Your Selected Location"
         marker.icon = resources.getDrawable(R.drawable.ic_location)
 
@@ -242,7 +210,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     private fun createStartMarker() {
-        val markerPoint = startLocationLatLng // jakarta
+        val markerPoint = startLocationLatLng
         val marker = Marker(map)
         marker.position = markerPoint
         marker.title = "Lokasi awal atau lokasi penjemputan"
@@ -254,12 +222,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     private fun createDestinationMarker() {
-//        if (tempIndex != null) {
-//            map.overlays.removeAt(tempIndex!!)
-//            tempIndex = null
-//        }
-
-        val markerPoint = startLocationLatLng // jakarta
+        val markerPoint = destinationLocationLatLng
         val marker = Marker(map)
         marker.position = markerPoint
         marker.title = "Lokasi yang dituju"
@@ -284,13 +247,6 @@ class MainActivity : AppCompatActivity(), MainView {
             fabMyLocation.setOnClickListener {
                 observeUserLocation()
             }
-//            switchShowCity.setOnCheckedChangeListener { compoundButton, value ->
-//                if (value) {
-//                    initCityMarker(LocationItem.getDummyLocations())
-//                } else {
-//                    map.overlays.clear()
-//                }
-//            }
 
             layoutStartLocation.setOnClickListener {
                 startActivityForResult(Intent(this@MainActivity, SearchActivity::class.java), SEARCH_PICKUP_CODE)

@@ -1,16 +1,16 @@
 package com.mikirinkode.openstreetmapsample.feature.search
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mikirinkode.openstreetmapsample.feature.main.MainActivity
 import com.mikirinkode.openstreetmapsample.data.network.SearchResultResponse
 import com.mikirinkode.openstreetmapsample.databinding.ActivitySearchBinding
+import com.mikirinkode.openstreetmapsample.feature.main.MainActivity
 
 class SearchActivity : AppCompatActivity(), SearchView {
 

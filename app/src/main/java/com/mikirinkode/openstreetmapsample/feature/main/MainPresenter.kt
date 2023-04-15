@@ -22,19 +22,12 @@ class MainPresenter(private val view: MainView) {
                     withContext(Dispatchers.Main){
                         view.updateAddress(obj.getAddressLine(0))
                     }
-//                        return obj.getAddressLine(0)
-//                    binding.edtStartLocation.text = obj.getAddressLine(0)
                 }
-//                binding.edtStartLocation.text = "error"
-//                    return ""
+
 
             } catch (e: IOException) {
-//                binding.edtStartLocation.text = "error"
                 e.printStackTrace()
-//                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-//                    return "${e.message}"
             }
-
         }
     }
 }
