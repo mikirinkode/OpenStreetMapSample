@@ -1,6 +1,7 @@
 package com.mikirinkode.openstreetmapsample
 
 import android.app.appsearch.SearchResult
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -67,7 +68,12 @@ class SearchActivity : AppCompatActivity(), SearchView {
         }
 
         searchAdapter.onItemClick = { response ->
-            Toast.makeText(this, "${response.displayName}", Toast.LENGTH_SHORT).show()
+            val intent = Intent()
+            intent.putExtra(MainActivity.EXTRA_ADDRESS, response.displayName)
+            intent.putExtra(MainActivity.EXTRA_LATITUDE, response.lat)
+            intent.putExtra(MainActivity.EXTRA_LONGITUDE, response.lon)
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
     private fun showLoading() {
@@ -76,5 +82,11 @@ class SearchActivity : AppCompatActivity(), SearchView {
 
     private fun hideLoading() {
         binding.progressIndicator.visibility = View.GONE
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_CANCELED, intent)
+        finish()
+        super.onBackPressed()
     }
 }

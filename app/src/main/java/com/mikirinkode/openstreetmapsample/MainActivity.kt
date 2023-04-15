@@ -63,6 +63,12 @@ class MainActivity : AppCompatActivity(), MainView {
         private const val BTN_TEXT_SELECT_AS_START_LOCATION = "Pilih sebagai lokasi awal"
         private const val BTN_TEXT_SELECT_AS_DESTINATION_LOCATION = "Pilih sebagai lokasi tujuan"
         private const val BTN_TEXT_CONFIRM = "Konfirmasi & Lanjutkan"
+
+        const val SEARCH_PICKUP_CODE = 1
+        const val SEARCH_DESTINATION_CODE = 2
+        const val EXTRA_ADDRESS = "extra_address"
+        const val EXTRA_LATITUDE = "extra_latitude"
+        const val EXTRA_LONGITUDE = "extra_longitude"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -294,10 +300,10 @@ class MainActivity : AppCompatActivity(), MainView {
 //            }
 
             layoutStartLocation.setOnClickListener {
-                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                startActivityForResult(Intent(this@MainActivity, SearchActivity::class.java), SEARCH_PICKUP_CODE)
             }
             layoutDestinationLocation.setOnClickListener {
-                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                startActivityForResult(Intent(this@MainActivity, SearchActivity::class.java), SEARCH_DESTINATION_CODE)
             }
 
             btnSelectLocation.setOnClickListener {
@@ -328,5 +334,33 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private fun hideLoading() {
         binding.progressIndicator.visibility = View.GONE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            SEARCH_PICKUP_CODE -> {
+                val address = data?.getStringExtra(EXTRA_ADDRESS)
+                val latitude = data?.getStringExtra(EXTRA_LATITUDE)?.toDouble() ?: 0.0
+                val longitude = data?.getStringExtra(EXTRA_LONGITUDE)?.toDouble() ?: 0.0
+                val point = GeoPoint(latitude, longitude)
+
+                binding.edtStartLocation.text = address.toString()
+                createMarker(point)
+
+                observeOnUpdateData()
+            }
+            SEARCH_DESTINATION_CODE -> {
+                val address = data?.getStringExtra(EXTRA_ADDRESS)
+                val latitude = data?.getStringExtra(EXTRA_LATITUDE)?.toDouble() ?: 0.0
+                val longitude = data?.getStringExtra(EXTRA_LONGITUDE)?.toDouble() ?: 0.0
+                val point = GeoPoint(latitude, longitude)
+
+                binding.edtDestinationLocation.text = address.toString()
+                createMarker(point)
+
+                observeOnUpdateData()
+            }
+        }
     }
 }
