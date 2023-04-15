@@ -1,8 +1,4 @@
-package com.mikirinkode.openstreetmapsample
-
-import org.osmdroid.api.IMapController
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
+package com.mikirinkode.openstreetmapsample.utils
 
 data class LocationItem(
 

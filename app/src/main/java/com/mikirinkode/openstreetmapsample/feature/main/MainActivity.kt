@@ -1,21 +1,16 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.feature.main
 
-import android.content.Context
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.mikirinkode.openstreetmapsample.utils.LocationItem
+import com.mikirinkode.openstreetmapsample.R
 import com.mikirinkode.openstreetmapsample.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.mikirinkode.openstreetmapsample.feature.search.SearchActivity
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration.*
 import org.osmdroid.events.MapEventsReceiver
@@ -27,8 +22,6 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import java.io.IOException
-import java.util.*
 import kotlin.collections.ArrayList
 
 

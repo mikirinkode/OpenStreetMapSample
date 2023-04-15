@@ -1,17 +1,11 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.feature.search
 
-import android.content.Context
-import android.location.Address
-import android.location.Geocoder
-import android.text.Editable
 import android.util.Log
-import android.widget.Toast
+import com.mikirinkode.openstreetmapsample.data.network.ApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.util.*
 
 class SearchProvider(private var view: SearchView) {
 

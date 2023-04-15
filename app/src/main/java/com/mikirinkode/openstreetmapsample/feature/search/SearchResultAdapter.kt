@@ -1,8 +1,9 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.feature.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.mikirinkode.openstreetmapsample.data.network.SearchResultResponse
 import com.mikirinkode.openstreetmapsample.databinding.ItemSearchResultBinding
 
 class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchViewHolder>() {

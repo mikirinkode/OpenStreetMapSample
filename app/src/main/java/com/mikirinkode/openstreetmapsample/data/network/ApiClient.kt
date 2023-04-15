@@ -1,4 +1,4 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.data.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

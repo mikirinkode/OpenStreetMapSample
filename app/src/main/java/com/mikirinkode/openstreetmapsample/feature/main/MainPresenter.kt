@@ -1,4 +1,4 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.feature.main
 
 import android.content.Context
 import android.location.Address

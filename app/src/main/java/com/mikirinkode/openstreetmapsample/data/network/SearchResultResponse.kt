@@ -1,49 +1,49 @@
-package com.mikirinkode.openstreetmapsample
+package com.mikirinkode.openstreetmapsample.data.network
 
 import com.google.gson.annotations.SerializedName
 
 data class SearchResultResponse(
 
-	@field:SerializedName("osm_id")
+    @field:SerializedName("osm_id")
 	val osmId: String,
 
-	@field:SerializedName("licence")
+    @field:SerializedName("licence")
 	val licence: String,
 
-	@field:SerializedName("boundingbox")
+    @field:SerializedName("boundingbox")
 	val boundingbox: List<String>,
 
-	@field:SerializedName("address")
+    @field:SerializedName("address")
 	val address: Address,
 
-	@field:SerializedName("importance")
+    @field:SerializedName("importance")
 	val importance: Any,
 
-	@field:SerializedName("icon")
+    @field:SerializedName("icon")
 	val icon: String,
 
-	@field:SerializedName("lon")
+    @field:SerializedName("lon")
 	val lon: String,
 
-	@field:SerializedName("display_name")
+    @field:SerializedName("display_name")
 	val displayName: String,
 
-	@field:SerializedName("type")
+    @field:SerializedName("type")
 	val type: String,
 
-	@field:SerializedName("osm_type")
+    @field:SerializedName("osm_type")
 	val osmType: String,
 
-	@field:SerializedName("extratags")
+    @field:SerializedName("extratags")
 	val extratags: Extratags,
 
-	@field:SerializedName("class")
+    @field:SerializedName("class")
 	val jsonMemberClass: String,
 
-	@field:SerializedName("place_id")
+    @field:SerializedName("place_id")
 	val placeId: String,
 
-	@field:SerializedName("lat")
+    @field:SerializedName("lat")
 	val lat: String
 )
 
