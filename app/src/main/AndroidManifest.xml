@@ -17,6 +17,7 @@
         android:theme="@style/Theme.OpenStreetMapSample"
         tools:targetApi="31">
         <activity
+            android:label="Search"
             android:name=".SearchActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity">

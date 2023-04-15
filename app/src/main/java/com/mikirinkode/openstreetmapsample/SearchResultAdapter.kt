@@ -9,6 +9,8 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchViewH
 
     private val list = ArrayList<SearchResultResponse>()
 
+    var onItemClick: ((SearchResultResponse) -> Unit)? = null
+
     fun setList(newList: List<SearchResultResponse>){
         list.clear()
         list.addAll(newList)
@@ -22,7 +24,11 @@ class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.SearchViewH
                     tvLocationName.text = response.displayName
                 }
             }
-
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(list[bindingAdapterPosition])
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {

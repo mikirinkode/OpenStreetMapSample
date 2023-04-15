@@ -1,8 +1,14 @@
 package com.mikirinkode.openstreetmapsample
 
+import android.app.appsearch.SearchResult
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikirinkode.openstreetmapsample.databinding.ActivitySearchBinding
 
@@ -16,6 +22,10 @@ class SearchActivity : AppCompatActivity(), SearchView {
         SearchResultAdapter()
     }
 
+    private val searchProvider: SearchProvider by lazy {
+        SearchProvider(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -25,15 +35,46 @@ class SearchActivity : AppCompatActivity(), SearchView {
             rvResult.adapter = searchAdapter
         }
 
-        val searchProvider = SearchProvider(this)
+        binding.edtStartLocation.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                TODO("Not yet implemented")
+            }
 
-        binding.btnSearch.setOnClickListener {
-            Toast.makeText(this, "Search/${binding.edtStartLocation.text.toString()}", Toast.LENGTH_SHORT).show()
-            searchProvider.search(binding.edtStartLocation.text.toString().trim())
-        }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                showLoading()
+                searchProvider.search(p0.toString().trim())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+//                TODO("Not yet implemented")
+            }
+
+        })
+
+        clickAction()
     }
 
     override fun setData(list: List<SearchResultResponse>) {
         searchAdapter.setList(list)
+        hideLoading()
+    }
+
+    private fun clickAction(){
+        binding.btnSearch.setOnClickListener {
+            Toast.makeText(this, "Search/${binding.edtStartLocation.text.toString()}", Toast.LENGTH_SHORT).show()
+            searchProvider.search(binding.edtStartLocation.text.toString().trim())
+            showLoading()
+        }
+
+        searchAdapter.onItemClick = { response ->
+            Toast.makeText(this, "${response.displayName}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun showLoading() {
+        binding.progressIndicator.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressIndicator.visibility = View.GONE
     }
 }
